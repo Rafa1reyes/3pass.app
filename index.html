@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3Pass — The shared trespass registry for security teams</title>
+<meta name="description" content="3Pass gives security companies one shared 602 trespass registry: subjects, properties, live map, and clean documentation your whole region can trust.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 6 L88 20 V48 C88 72 71 88 50 95 C29 88 12 72 12 48 V20 Z' fill='%23f5a623'/%3E%3Cpath d='M50 14 L80 25 V48 C80 66 67 80 50 86 C33 80 20 66 20 48 V25 Z' fill='%231a1206'/%3E%3Ctext x='50' y='62' font-family='Arial' font-size='34' font-weight='bold' fill='%23f5a623' text-anchor='middle'%3E3%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#12100a; --bg2:#1a1206; --panel:#221809; --line:#3a2d14;
+    --amber:#f5a623; --amber2:#ffc85c; --green:#6fdd7f; --red:#e5534b;
+    --ink:#f7f1e3; --dim:#b3a684;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  nav{position:sticky;top:0;z-index:50;background:rgba(18,16,10,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px;text-decoration:none;color:var(--amber)}
+  .logo .shield{font-size:24px}
+  .nav-links{display:flex;gap:28px;font-size:14.5px;font-weight:600}
+  .nav-links a{text-decoration:none;color:var(--dim)}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-block;background:var(--amber);color:#1a1206;font-weight:800;padding:11px 22px;border-radius:10px;text-decoration:none;font-size:15px;transition:transform .12s,background .12s}
+  .btn:hover{transform:translateY(-2px);background:var(--amber2)}
+  .btn.big{padding:15px 32px;font-size:16.5px}
+  .btn.ghost{background:transparent;color:var(--amber);border:2px solid var(--amber)}
+  .hero{padding:84px 0 66px;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  .kicker{display:inline-block;background:#2b2007;color:var(--amber2);font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:6px;margin-bottom:20px;border:1px solid var(--line)}
+  h1{font-size:50px;line-height:1.08;font-weight:900;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--amber)}
+  .sub{font-size:18.5px;color:var(--dim);margin:22px 0 30px;max-width:32em}
+  .cta-row{display:flex;gap:14px;align-items:center}
+  .fineprint{font-size:12.5px;color:#8a7c58;margin-top:14px}
+  /* registry mockup */
+  .reg{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .reg-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);font-size:13px;font-weight:800}
+  .reg-top .lt{color:var(--amber)}
+  .live{color:var(--green)}
+  .live::before{content:'●';margin-right:6px;animation:blink 1.6s infinite}
+  @keyframes blink{50%{opacity:.3}}
+  .subject{display:flex;gap:12px;align-items:center;padding:13px 18px;border-bottom:1px solid #2b2110;font-size:13.5px}
+  .mug{width:38px;height:38px;border-radius:8px;background:#3a2d14;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .s-name{font-weight:800}
+  .s-meta{color:var(--dim);font-size:12px}
+  .chip{margin-left:auto;font-size:11px;font-weight:900;padding:3px 10px;border-radius:5px;letter-spacing:.03em}
+  .chip.active{background:#3a1512;color:#ff9c95}
+  .chip.exp{background:#1c2b12;color:var(--green)}
+  .reg-foot{padding:12px 18px;font-size:12px;color:var(--dim);display:flex;justify-content:space-between}
+  section{padding:72px 0}
+  .sec-k{color:var(--amber);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  h2{font-size:36px;font-weight:900;letter-spacing:-.01em;margin:10px 0 14px}
+  .lead{color:var(--dim);font-size:17px;max-width:46em}
+  .probs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  .prob{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:26px 22px}
+  .prob .ic{font-size:28px}
+  .prob h3{font-size:17.5px;margin:12px 0 6px}
+  .prob p{font-size:14px;color:var(--dim)}
+  .feats{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:40px}
+  .feat{display:flex;gap:16px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .feat .ic{width:46px;height:46px;border-radius:11px;background:#2b2007;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
+  .feat h3{font-size:17px;margin-bottom:4px}
+  .feat p{font-size:14px;color:var(--dim)}
+  /* pricing */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  .tier{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:30px 26px;position:relative;display:flex;flex-direction:column}
+  .tier.pop{border-color:var(--amber);box-shadow:0 0 40px rgba(245,166,35,.12)}
+  .pop-tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--amber);color:#1a1206;font-size:11px;font-weight:900;padding:4px 14px;border-radius:12px;letter-spacing:.05em}
+  .t-name{font-weight:800;font-size:15px;color:var(--dim)}
+  .t-price{font-size:40px;font-weight:900;margin:8px 0 2px}
+  .t-price small{font-size:15px;color:var(--dim);font-weight:600}
+  .t-desc{font-size:13.5px;color:var(--dim);margin-bottom:18px}
+  .tier ul{list-style:none;font-size:14px;margin-bottom:24px}
+  .tier li{padding:5px 0 5px 26px;position:relative}
+  .tier li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:900}
+  .tier .btn{margin-top:auto;text-align:center}
+  .tier-note{margin-top:18px;font-size:13px;color:var(--dim);text-align:center}
+  .band{background:linear-gradient(135deg,#2b2007,#1a1206);border:1px solid var(--line);border-radius:24px;padding:56px 48px;text-align:center;margin:20px 0 40px}
+  .band p{color:var(--dim);margin-bottom:26px}
+  footer{border-top:1px solid var(--line);padding:36px 0 46px;font-size:13.5px;color:#8a7c58}
+  .f-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .f-in a{color:var(--amber2);text-decoration:none;font-weight:700}
+  @media(max-width:920px){
+    .hero{grid-template-columns:1fr}
+    h1{font-size:38px}
+    .probs,.tiers{grid-template-columns:1fr}
+    .feats{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="logo" href="#"><span class="shield">🛡️</span>3PASS</a>
+  <div class="nav-links">
+    <a href="#why">Why 3Pass</a><a href="#features">Features</a><a href="#pricing">Pricing</a>
+  </div>
+  <a class="btn" href="mailto:sales@3pass.us?subject=3Pass%20demo%20request">Request a demo</a>
+</div></nav>
+
+<header class="wrap hero">
+  <div>
+    <span class="kicker">⚡ Built by guards, for guard companies</span>
+    <h1>One shared <em>trespass registry</em> for your whole region.</h1>
+    <p class="sub">Your officers 602 someone off a property — and every partner company still runs into them blind next week. 3Pass puts subjects, properties, and trespass documentation in one registry your entire region shares.</p>
+    <div class="cta-row">
+      <a class="btn big" href="mailto:sales@3pass.us?subject=3Pass%20demo%20request&body=Company%20name%3A%0AApprox.%20number%20of%20officers%3A">🛡️ Request a demo</a>
+      <a class="btn big ghost" href="#pricing">See pricing</a>
+    </div>
+    <p class="fineprint">Flat monthly pricing per company · No per-officer surprises · Cancel anytime</p>
+  </div>
+  <div class="reg">
+    <div class="reg-top"><span class="lt">🛡️ REGIONAL REGISTRY</span><span class="live">LIVE · 3 companies connected</span></div>
+    <div class="subject"><span class="mug">👤</span><div><div class="s-name">Subject #4417 · “Red Beanie”</div><div class="s-meta">602’d — Oakridge Plaza · by Guardian Security · 2d ago</div></div><span class="chip active">ACTIVE 602</span></div>
+    <div class="subject"><span class="mug">👤</span><div><div class="s-name">Subject #4392</div><div class="s-meta">Verbal warning — Hillcrest Mall · by Vanguard PG · 5d ago</div></div><span class="chip active">ACTIVE 602</span></div>
+    <div class="subject"><span class="mug">👤</span><div><div class="s-name">Subject #4108</div><div class="s-meta">602 expired — Westgate Center · by Sentry One · 1y ago</div></div><span class="chip exp">EXPIRED</span></div>
+    <div class="reg-foot"><span>🗺️ 61 properties mapped</span><span>📋 214 subjects on file</span></div>
+  </div>
+</header>
+
+<section id="why"><div class="wrap">
+  <span class="sec-k">The problem</span>
+  <h2>Every company keeps its own list. That’s the problem.</h2>
+  <p class="lead">Trespass information lives in binders, group texts, and officers’ memories. The moment a subject crosses the street to a property you don’t patrol, all that documentation stops mattering.</p>
+  <div class="probs">
+    <div class="prob"><span class="ic">🗂️</span><h3>Scattered records</h3><p>Paper logs and photos in five different phones don’t hold up — and don’t transfer between shifts, let alone companies.</p></div>
+    <div class="prob"><span class="ic">🕶️</span><h3>Officers walking in blind</h3><p>Your new hire has no idea the person at the loading dock was trespassed twice last month by the company across town.</p></div>
+    <div class="prob"><span class="ic">⚖️</span><h3>Documentation that folds</h3><p>When police or property managers ask for the paper trail, “Dave remembers him” isn’t documentation.</p></div>
+  </div>
+</div></section>
+
+<section id="features"><div class="wrap">
+  <span class="sec-k">The fix</span>
+  <h2>Everything your officers need, in the pocket they already have</h2>
+  <div class="feats">
+    <div class="feat"><div class="ic">📋</div><div><h3>Shared subject registry</h3><p>Photos, descriptions, incident history, and active 602 status — searchable in seconds, shared across every connected company in your region.</p></div></div>
+    <div class="feat"><div class="ic">🗺️</div><div><h3>Live property map</h3><p>Every covered property pinned with its active trespasses. Officers see exactly what’s active where they’re standing.</p></div></div>
+    <div class="feat"><div class="ic">📝</div><div><h3>Clean 602 workflow</h3><p>Document a trespass admonishment in under two minutes — subject, property, photos, expiration. Court-ready record every time.</p></div></div>
+    <div class="feat"><div class="ic">🤝</div><div><h3>Cross-company sharing</h3><p>Companies choose what to share with the regional network. Compete for contracts, cooperate on safety.</p></div></div>
+    <div class="feat"><div class="ic">⏰</div><div><h3>Expirations handled</h3><p>602s expire automatically on schedule, so your registry stays accurate — and defensible — without spreadsheet babysitting.</p></div></div>
+    <div class="feat"><div class="ic">👮</div><div><h3>Role-based access</h3><p>Admins manage the account; officers get exactly what they need on patrol. Every action is logged.</p></div></div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <span class="sec-k">Pricing</span>
+  <h2>Flat monthly price. Your whole company.</h2>
+  <p class="lead">Pick the size that fits your roster. Every plan includes the full registry, map, 602 workflow, and regional sharing.</p>
+  <div class="tiers">
+    <div class="tier">
+      <div class="t-name">SMALL COMPANY</div>
+      <div class="t-price">$99<small>/mo</small></div>
+      <div class="t-desc">Up to 10 users</div>
+      <ul><li>Full shared registry</li><li>Live property map</li><li>602 documentation flow</li><li>Email support</li></ul>
+      <a class="btn ghost" href="mailto:sales@3pass.us?subject=3Pass%20—%20Up%20to%2010%20users">Start here</a>
+    </div>
+    <div class="tier pop">
+      <span class="pop-tag">MOST POPULAR</span>
+      <div class="t-name">GROWING COMPANY</div>
+      <div class="t-price">$399<small>/mo</small></div>
+      <div class="t-desc">Up to 50 users</div>
+      <ul><li>Everything in Small</li><li>Multi-site property groups</li><li>Priority support</li><li>Onboarding for your team</li></ul>
+      <a class="btn" href="mailto:sales@3pass.us?subject=3Pass%20—%20Up%20to%2050%20users">Request a demo</a>
+    </div>
+    <div class="tier">
+      <div class="t-name">LARGE OPERATION</div>
+      <div class="t-price">$699<small>+/mo</small></div>
+      <div class="t-desc">100 to unlimited users</div>
+      <ul><li>Everything in Growing</li><li>100 / 500 / 1,000 / unlimited seats</li><li>Regional network setup</li><li>Dedicated account manager</li></ul>
+      <a class="btn ghost" href="mailto:sales@3pass.us?subject=3Pass%20—%20Large%20operation">Talk to us</a>
+    </div>
+  </div>
+  <p class="tier-note">Between sizes? Tiers run 10 / 20 / 30 / 40 / 50 / 100 / 500 / 1,000 / unlimited — from $99 to $5,999/mo. We’ll fit you to the right one.</p>
+</div></section>
+
+<div class="wrap"><div class="band">
+  <h2>See 3Pass on your own properties</h2>
+  <p>Book a 20-minute demo — we’ll load your patrol map and show your team exactly how it works.</p>
+  <a class="btn big" href="mailto:sales@3pass.us?subject=3Pass%20demo%20request&body=Company%20name%3A%0AApprox.%20number%20of%20officers%3A%0ACity%2Fregion%3A">🛡️ Request a demo</a>
+</div></div>
+
+<footer><div class="wrap f-in">
+  <span>© 2026 Spindola Software · 3Pass™</span>
+  <span>Questions? <a href="mailto:hello@3pass.us">hello@3pass.us</a></span>
+</div></footer>
+
+</body>
+</html>
